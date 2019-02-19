@@ -6,13 +6,13 @@
 //package puzzlegame;
 
 
-import java.awt.Insets;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -29,6 +29,9 @@ import javafx.stage.Stage;
 
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -102,6 +105,38 @@ public class PuzzleGame extends Application {
                 gameGrid.setHgap(2);
                 gameGrid.setVgap(2);
                 gameGrid.relocate(200,200);
+                
+                GridPane btnGrid = new GridPane();
+                btnGrid.setHgap(4);
+                btnGrid.setVgap(4);
+                Button hint = new Button("Hint");
+                btnGrid.add(hint,3,3);
+                
+                hint.setOnAction(new EventHandler<ActionEvent>(){
+                    
+                    @Override
+                    public void handle(ActionEvent a){
+                        n= s.findMistakes(n);
+                        for(int b=0;b<3;b++){
+                            for(int i=0;i<4;i++){
+                                for(int j=0;j<4;j++){
+                                    if((n.get(b)[i][j]==false)&& buttons.get(b)[i][j].getText()=="O"){
+                                        buttons.get(b)[i][j].setBackground(new Background(new BackgroundFill(
+                Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                                        
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                    
+                    
+                    
+                });
+                
+                
+                
                 
                 GridPane fGrid = new GridPane(); //fGrid stands for the function grid that will contain all the buttons that do functions
                 fGrid.setGridLinesVisible(true);
@@ -217,6 +252,8 @@ public class PuzzleGame extends Application {
                                     }else{
                                         n.get(b)[i][j]= false;
                                     }
+                                    buttons.get(b)[i][j].setBackground(new Background(new BackgroundFill(
+                Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
                                    
                                 }    
                                 
@@ -227,7 +264,7 @@ public class PuzzleGame extends Application {
                             dialog.initModality(Modality.APPLICATION_MODAL);
                             dialog.initOwner(primaryStage);
                             VBox dialogVbox = new VBox(20);
-                            dialogVbox.getChildren().add(new Text("You Won"));
+                            dialogVbox.getChildren().add(new Text("You Won!/n It Took you ____ seconds to complete /n "));
                             Scene dialogScene = new Scene(dialogVbox, 300, 200);
                             dialog.setScene(dialogScene);
                             dialog.show();
@@ -326,8 +363,11 @@ public class PuzzleGame extends Application {
                 gameGrid.add(vGrid4, 3, 1);
                 
                 gameGrid.add(fGrid, 2, 2);
-                gameGrid.add(fGrid2, 3, 2);
-                gameGrid.add(fGrid3, 2, 3);
+                gameGrid.add(fGrid2, 2, 3);
+                gameGrid.add(fGrid3, 3, 2);
+                
+                
+                gameGrid.add(btnGrid,3,3);
                 
                 gameGrid.add(var1, 0, 2);
                 gameGrid.add(var2, 0, 3);
