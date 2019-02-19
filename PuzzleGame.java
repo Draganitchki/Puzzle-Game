@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package puzzlegame;
+//package puzzlegame;
 
 
 import java.awt.Insets;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,8 +28,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 
 /**
  *
@@ -36,10 +40,27 @@ import javafx.scene.paint.Color;
  */
 public class PuzzleGame extends Application {
     
+    ArrayList<Button[][]> buttons = new ArrayList<Button[][]>();
+    ArrayList<boolean[][]> n = new ArrayList<boolean[][]>();
+    Solutions s = new Solutions();
+    GamesNClues g;
+    Button[][] a = new Button[4][4];
+    Button[][] b = new Button[4][4];
+    Button[][] c = new Button[4][4];
+    boolean[][] d = new boolean[4][4];
+    
+    
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Create");
+        buttons.add(a);
+        buttons.add(b);
+        buttons.add(c);
+        n.add(d);
+        n.add(d);
+        n.add(d);
+        Button btn = new Button("Create");
+        btn.setMinSize(100, 20);
+        //btn.setText("Create");
         Alert invalidSelection = new Alert(AlertType.WARNING);
         invalidSelection.setHeaderText("Invalid Selection");
         invalidSelection.setContentText("This opetion is not implement yet, Please select 3x4 for grid and easy for diffculty");
@@ -69,10 +90,13 @@ public class PuzzleGame extends Application {
             @Override
             public void handle(ActionEvent event) {
             Label secondLabel = new Label("Hello");
+            
              
             
             
             if (comboBox.getValue() == "3x4 Grid" && comboBox2.getValue() == "Easy"){
+                g = new GamesNClues("3x4","Easy");
+                s.addSolution(g.getSolution());
                 Pane secondaryLayout = new Pane();
                 GridPane gameGrid = new GridPane();
                 gameGrid.setHgap(2);
@@ -86,9 +110,24 @@ public class PuzzleGame extends Application {
                 for(int i=0; i<4;i++){
                     for(int j=0;j<4;j++){
                         
-                        Button a = new Button();
+                        Button a = new Button(" ");
                         a.setMinSize(40, 40);
                         fGrid.add(a,i,j);
+                        buttons.get(0)[i][j] = a;
+                        a.setOnAction(new EventHandler<ActionEvent>() {
+            
+                            @Override
+                            public void handle(ActionEvent event) {
+                                if(a.getText()=="X"){
+                                    a.setText("O");
+                                }else if(a.getText()=="O"){
+                                    a.setText(" ");
+                                }else{
+                                    a.setText("X");
+                                }
+                            
+                            }
+                        });
                     }
                 }
                 
@@ -99,9 +138,25 @@ public class PuzzleGame extends Application {
                 for(int i=0; i<4;i++){
                     for(int j=0;j<4;j++){
                         
-                        Button b = new Button();
+                        Button b = new Button(" ");
                         b.setMinSize(40, 40);
                         fGrid2.add(b,i,j);
+                        buttons.get(1)[i][j] = b;
+                        b.setOnAction(new EventHandler<ActionEvent>() {
+            
+                            @Override
+                            public void handle(ActionEvent event) {
+                                if(b.getText()=="X"){
+                                    b.setText("O");
+                                }else if(b.getText()=="O"){
+                                    b.setText(" ");
+                                }else{
+                                    b.setText("X");
+                                }
+                            
+                            }
+                        });
+                        
                     }
                 }
                 
@@ -112,11 +167,78 @@ public class PuzzleGame extends Application {
                 for(int i=0; i<4;i++){
                     for(int j=0;j<4;j++){
                         
-                        Button c = new Button();
+                        Button c = new Button(" ");
                         c.setMinSize(40, 40);
                         fGrid3.add(c,i,j);
+                        buttons.get(2)[i][j] = c;
+                        c.setOnAction(new EventHandler<ActionEvent>() {
+            
+                            @Override
+                            public void handle(ActionEvent event) {
+                                if(c.getText()=="X"){
+                                    c.setText("O");
+                                }else if(c.getText()=="O"){
+                                    c.setText(" ");
+                                }else{
+                                    c.setText("X");
+                                }
+                            
+                            }
+                        });
                     }
                 }
+                //constanly updating and checking
+                secondaryLayout.setOnMouseMoved(new EventHandler<MouseEvent>(){
+                    
+                    @Override
+                    public void handle(MouseEvent e){
+                        
+                        
+                        // updates wrong answers when a spot is marked correct
+                        for(int b=0;b<3;b++){
+                            for(int i=0;i<4;i++){
+                                for(int j=0;j<4;j++){
+                                    buttons.get(b)[i][j].setTextFill(Color.BLACK);
+                                    if(buttons.get(b)[i][j].getText()=="O"){
+                                        for(int x=0;x<4;x++){
+                                            for(int y=0;y<4;y++){
+                                                if((x==i && y!=j)||(y==j && x!=i)){
+                                                    if(buttons.get(b)[x][y].getText()=="O"){
+                                                        buttons.get(b)[x][y].setTextFill(Color.CRIMSON );
+                                                    }else{
+                                                        buttons.get(b)[x][y].setText("X");
+                                                    }
+                                                }
+                                                
+                                            }
+                                        }
+                                        //creates boolean array
+                                        n.get(b)[i][j]= true;
+                                    }else{
+                                        n.get(b)[i][j]= false;
+                                    }
+                                   
+                                }    
+                                
+                            }
+                        }
+                        if(s.checkSolutions(n)){
+                            final Stage dialog = new Stage();
+                            dialog.initModality(Modality.APPLICATION_MODAL);
+                            dialog.initOwner(primaryStage);
+                            VBox dialogVbox = new VBox(20);
+                            dialogVbox.getChildren().add(new Text("You Won"));
+                            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                            dialog.setScene(dialogScene);
+                            dialog.show();
+                        }
+                        
+                    }
+                    
+                        
+                    
+                });{
+             
                 
                 GridPane vGrid = new GridPane();
                 vGrid.setGridLinesVisible(true);
@@ -214,16 +336,27 @@ public class PuzzleGame extends Application {
                 secondaryLayout.getChildren().add(gameGrid);
                 
                 Stage secondStage = new Stage();
-                secondStage.setTitle("New Stage");
+                secondStage.setTitle("3x4 easy");
                 secondStage.setScene(secondScene);
                 
 
                 secondStage.show();
                 primaryStage.close();
                 }
-            else
-            {
+            }
+            else{
                 invalidSelection.showAndWait();
+            }
+
+            class EventHandlerImpl implements EventHandler<MouseEvent> {
+
+                public EventHandlerImpl() {
+                }
+
+                @Override
+                public void handle(MouseEvent event){
+                    
+                }
             }
             }
         });
@@ -254,7 +387,7 @@ public class PuzzleGame extends Application {
         
         root.getChildren().add(gridpane);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Puzzle Game");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
