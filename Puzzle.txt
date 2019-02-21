@@ -1,0 +1,50 @@
+ Dollars
+ Woods
+ Woodworkers
+ Woods
+ $250
+ $275
+ $300
+ $325
+ Ash
+ Chestnut
+ Elm
+ Rosewood
+ Gwen
+ Irma
+ Josephine
+ Olivia
+ Ash
+ Chestnut
+ Elm
+ RoseWood
+"Against the Grain" offers hand-made wooden furniture
+at reasonable prices.Each item is made by an in-house
+employee. Using only the clues that follow, match  
+each item to the employee who crafted it,and determine
+its price and the type of wood used to make it.
+
+
+
+Remember, as with all grid-based logic puzzles, 
+no option in any category will ever be used more than once. 
+If you get stuck or run into problems, try the "Clear Errors" 
+button to remove any mistakes that might be present on the grid, 
+or the "Hint" button to see the next logical step in the puzzle.
+
+1. Irma's piece is either the $250 piece or the $275 item.
+2. Josephine's piece costs 25 dollars more than the piece made of ash.
+3. Gwen's item was made of ash.
+4. The item made of chestnut costs less than Gwen's piece.
+5. The piece made of elm costs 25 dollars less than Irma's piece.
+CLUE #1: If Irma is either $250 or $275, and $250 and $275 are in the 
+same category, then Irma does not equal $300.(+12 sec. penalty)
+
+CLUE #2: Ash and Gwen are explicitly true. 
+ (+12 sec. penalty)
+
+CLUE #3: If chestnut is less than Gwen, then chestnut cannot equal the 
+largest value ($325) in the set. (+12 sec. penalty)
+
+
+
