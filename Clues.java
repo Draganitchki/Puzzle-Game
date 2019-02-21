@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -51,7 +52,7 @@ public class Clues {
     private void getClues(){
         try{
             BufferedReader br = new BufferedReader(new FileReader("Puzzle.txt"));
-            for(int j=0;j<14;j++){
+            for(int j=0;j<34;j++){
                 br.readLine();
             }
             for(int i=0;i<15;i++){
@@ -85,6 +86,28 @@ public class Clues {
             }
         }
     }
+    
+    public ArrayList<String> getLables(){
+        ArrayList<String> s = new ArrayList<String>();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("Puzzle.txt"));
+            for(int i=0;i<20;i++){
+                s.add(br.readLine());
+            }
+            
+        }
+        catch(FileNotFoundException ex){
+            
+        }
+        catch(IOException ex){
+            
+        }
+        
+        return s;
+    }
+    
+    
+    
     
     public int getErrors(){
         return errors;

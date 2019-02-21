@@ -44,7 +44,7 @@ public class PuzzleGame extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        Solutions s = new Solutions();
+        Solutions sl = new Solutions();
         
        
         
@@ -112,16 +112,45 @@ public class PuzzleGame extends Application {
                     fourGrid g = new fourGrid();
                     gamePanes.add(g);
                 }
-                seePanes.add(new vGrid("justice",1,4));
-                seePanes.add(new vGrid("justice",1,4));
-                seePanes.add(new vGrid("justice",4,1));
-                seePanes.add(new vGrid("justice",4,1)); 
                 
-                labelPanes.add( new labelGrid("Variable A",1,175));
-                labelPanes.add( new labelGrid("Variable B",1,175));   
-                labelPanes.add( new labelGrid("Variable C",175,10));    
-                labelPanes.add( new labelGrid("Variable D",175,10));
+                ArrayList<String> s = clues.getLables();
+                ArrayList<String> temp = new ArrayList<String>();
+                int count = 0;
+                labelPanes.add( new labelGrid(s.get(count),1,175));
+                count++;
+                labelPanes.add( new labelGrid(s.get(count),1,175));
+                count++;
+                labelPanes.add( new labelGrid(s.get(count),175,10));
+                count++;
+                labelPanes.add( new labelGrid(s.get(count),175,10));
+                count++;
 
+                
+                for(int i=0;i<4;i++){
+                    temp.add(s.get(count));
+                    count++;
+                }
+                seePanes.add(new vGrid(temp,1,4));
+                temp.clear();
+                for(int i=0;i<4;i++){
+                    temp.add(s.get(count));
+                    count++;
+                }
+                seePanes.add(new vGrid(temp,1,4));
+                temp.clear();
+                for(int i=0;i<4;i++){
+                    temp.add(s.get(count));
+                    count++;
+                }
+                seePanes.add(new vGrid(temp,4,1));
+                temp.clear();
+                for(int i=0;i<4;i++){
+                    temp.add(s.get(count));
+                    count++;
+                }
+                seePanes.add(new vGrid(temp,4,1)); 
+                
+                
                 
                
 
@@ -165,7 +194,7 @@ public class PuzzleGame extends Application {
                     for(fourGrid g : gamePanes){
                         b.add(g.getState());
                     }
-                    b= s.findMistakes(b);
+                    b= sl.findMistakes(b);
                     for(int i=0;i<3;i++){
                         gamePanes.get(i).removeMistakes(b.get(i));
                     }
@@ -191,9 +220,11 @@ public class PuzzleGame extends Application {
             });
                 
                 GridPane buttons = new GridPane();
-                buttons.add(b, 1, 3, 1, 1);
-                buttons.add(m,1,2);
-                buttons.add(undo,1,3);
+                buttons.setHgap(30);
+                buttons.setVgap(30);
+                buttons.add(b, 1, 2, 1, 10);
+                buttons.add(m,1,5);
+                buttons.add(undo,1,7);
                 
                 
                 gameGrid.add(buttons, 3, 3);
@@ -221,7 +252,7 @@ public class PuzzleGame extends Application {
                         }
                         
                         
-                        if(s.checkSolutions(b)){
+                        if(sl.checkSolutions(b)){
                             int errors = 0;
                             for(int i=0;i<3;i++){
                                 errors += gamePanes.get(i).getCount();

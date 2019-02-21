@@ -5,6 +5,11 @@
  */
 //package puzzlegame;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
@@ -14,6 +19,8 @@ import javafx.scene.layout.GridPane;
  */
 public class vGrid {
     GridPane seeGrid;
+    
+    ArrayList<String> s = new ArrayList<String>();
     public vGrid(){
         seeGrid = new GridPane();
         seeGrid.setGridLinesVisible(true);
@@ -30,15 +37,19 @@ public class vGrid {
         
     }
     
-    public vGrid(String c,int a, int b){
+    
+    public vGrid(ArrayList<String> s,int a, int b){
         seeGrid = new GridPane();
         seeGrid.setGridLinesVisible(true);
         seeGrid.setHgap(a);
         seeGrid.setVgap(b);
+        int count =0;
+        
         for(int i=0; i<a;i++){
                     for(int j=0;j<b;j++){
                         
-                        Label d = new Label(c);
+                        Label d = new Label(s.get(count));
+                        count++;
                         if(a<b){
                             d.setMinSize(b*30,a*60);
                         }else{
@@ -48,8 +59,8 @@ public class vGrid {
                     }
         }
     }
-    
     public GridPane getGrid(){
         return seeGrid;
     }
+    
 }

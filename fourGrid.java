@@ -69,8 +69,11 @@ public class fourGrid {
                                                 if(bG[i][j].getText().equals("O")){
                                                     bG[i][j].setTextFill(Color.CRIMSON);
                                                 }else{
+                                                    bG[i][j].setTextFill(Color.BLACK);
                                                     bG[i][j].setText("X");
                                                 }
+                                            }else{
+                                                bG[i][j].setTextFill(Color.BLACK);
                                             }
                                         }
                                     }

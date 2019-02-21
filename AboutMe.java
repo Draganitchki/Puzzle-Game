@@ -58,7 +58,9 @@ public class AboutMe {
         String s = "";
         try{
             BufferedReader fr = new BufferedReader(new FileReader("Puzzle.txt"));
-            
+            for(int j=0;j<20;j++){
+                fr.readLine();
+            }
             for(int i=0;i<13;i++){
                 s += fr.readLine()+ "\n";
             }
