@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package puzzlegame;
+//package puzzlegame;
 
 
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Stack;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,8 +29,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 
 /**
  *
@@ -41,8 +45,11 @@ public class PuzzleGame extends Application {
     public void start(Stage primaryStage) {
         
         Solutions s = new Solutions();
-        GamesNClues g;
         
+       
+        
+        Stack<ArrayList<String[][]>> save = new Stack<ArrayList<String[][]>>();
+        save.add(new ArrayList<String[][]>());
         
         ArrayList<fourGrid> gamePanes = new ArrayList<fourGrid>();
         ArrayList<vGrid> seePanes = new ArrayList<vGrid>();
@@ -50,6 +57,7 @@ public class PuzzleGame extends Application {
         
         Button btn = new Button();
         btn.setText("Create");
+        btn.setMinSize(100, 20);
         Alert invalidSelection = new Alert(AlertType.WARNING);
         invalidSelection.setHeaderText("Invalid Selection");
         invalidSelection.setContentText("This opetion is not implement yet, Please select 3x4 for grid and easy for diffculty");
@@ -78,6 +86,8 @@ public class PuzzleGame extends Application {
             
             @Override
             public void handle(ActionEvent event) {
+                long startTime = System.currentTimeMillis();
+                
             Label secondLabel = new Label("Hello");
              
             
@@ -85,20 +95,23 @@ public class PuzzleGame extends Application {
             if (comboBox.getValue() == "3x4 Grid" && comboBox2.getValue() == "Easy"){
                 Pane secondaryLayout = new Pane();
                 
+                
                 GridPane gameGrid = new GridPane();
                 AboutMe aboutme  = new AboutMe("Enter Main Text here for about me");
+                aboutme.setText();
                 Clues clues = new Clues();
-                clues.addClue("hello");
-                 clues.addClue("Hello2");
+                clues.addClue();
+                
+                
                 
                 gameGrid.setHgap(2);
                 gameGrid.setVgap(2);
-                gameGrid.relocate(200,200);
+                gameGrid.relocate(0,0);
                 
                 for (int i=0;i<3;i++){
-                    gamePanes.add(new fourGrid());
+                    fourGrid g = new fourGrid();
+                    gamePanes.add(g);
                 }
-                
                 seePanes.add(new vGrid("justice",1,4));
                 seePanes.add(new vGrid("justice",1,4));
                 seePanes.add(new vGrid("justice",4,1));
@@ -120,8 +133,70 @@ public class PuzzleGame extends Application {
                 gameGrid.add(seePanes.get(3).getGrid(), 3, 1);
                 
                 gameGrid.add(gamePanes.get(0).getGrid(), 2, 2);
-                gameGrid.add(gamePanes.get(1).getGrid(), 3, 2);
-                gameGrid.add(gamePanes.get(2).getGrid(), 2, 3);
+                gameGrid.add(gamePanes.get(1).getGrid(), 2, 3);
+                gameGrid.add(gamePanes.get(2).getGrid(), 3, 2);
+                
+                
+                /*
+                
+                the hint button adds a hint to the screen
+                */
+                Button b = new Button("Hint");
+                
+                b.setOnAction(new EventHandler<ActionEvent>(){
+                
+                @Override
+                public void handle(ActionEvent e){
+                    clues.addClue();
+                    
+                }
+            });
+                
+                /*
+                the mistakes button removes mistakes
+                */
+                Button m = new Button("Mistakes");
+                
+                m.setOnAction(new EventHandler<ActionEvent>(){
+                
+                @Override
+                public void handle(ActionEvent e){
+                    ArrayList<boolean[][]> b = new ArrayList<boolean[][]>();
+                    for(fourGrid g : gamePanes){
+                        b.add(g.getState());
+                    }
+                    b= s.findMistakes(b);
+                    for(int i=0;i<3;i++){
+                        gamePanes.get(i).removeMistakes(b.get(i));
+                    }
+                        
+                    
+                }
+            });
+                
+                Button undo = new Button("Undo");
+                
+                undo.setOnAction(new EventHandler<ActionEvent>(){
+                
+                @Override
+                public void handle(ActionEvent e){
+                    if(!save.isEmpty()){
+                        ArrayList<String[][]> last = save.pop();
+                        for(int i =0;i<3;i++){
+                            gamePanes.get(i).setState(last.get(i));
+                        }
+                        
+                    }
+                }
+            });
+                
+                GridPane buttons = new GridPane();
+                buttons.add(b, 1, 3, 1, 1);
+                buttons.add(m,1,2);
+                buttons.add(undo,1,3);
+                
+                
+                gameGrid.add(buttons, 3, 3);
                 
                 gameGrid.add(labelPanes.get(0).getGrid(), 0, 2);
                 gameGrid.add(labelPanes.get(1).getGrid(), 0, 3);
@@ -129,8 +204,46 @@ public class PuzzleGame extends Application {
                 gameGrid.add(labelPanes.get(3).getGrid(), 3, 0);
                 secondaryLayout.getChildren().addAll(gameGrid,aboutme.getVBox(),clues.getVBox());
                 
+                
+                
+                secondaryLayout.setOnMouseMoved(new EventHandler<MouseEvent>(){
+                    
+                    @Override
+                    public void handle(MouseEvent e){
+                        ArrayList<boolean[][]> b = new ArrayList<boolean[][]>();
+                        ArrayList<String[][]> c = new ArrayList<String[][]>();
+                        for(fourGrid g : gamePanes){
+                            b.add(g.getState());
+                            c.add(g.getStrings());
+                        }
+                        if(!save.peek().equals(c)){
+                            save.push(c);
+                        }
+                        
+                        
+                        if(s.checkSolutions(b)){
+                            int errors = 0;
+                            for(int i=0;i<3;i++){
+                                errors += gamePanes.get(i).getCount();
+                            }
+                            errors += clues.getErrors();
+                            long finalTime = System.currentTimeMillis()- startTime +(12000*errors);
+                            finalTime = finalTime /1000;
+                            final Stage dialog = new Stage();
+                            dialog.initModality(Modality.APPLICATION_MODAL);
+                            dialog.initOwner(primaryStage);
+                            VBox dialogVbox = new VBox(20);
+                            dialogVbox.getChildren().add(new Text("You Won!/n It Took you "+ finalTime + " seconds to complete /n "));
+                            Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                            dialog.setScene(dialogScene);
+                            dialog.show();
+                        }
+                    }
+                    
+                });
+                
                 Stage secondStage = new Stage();
-                secondStage.setTitle("New Stage");
+                secondStage.setTitle("3X4 Easy");
                 secondStage.setScene(secondScene);
                 
 
@@ -170,7 +283,7 @@ public class PuzzleGame extends Application {
         
         root.getChildren().add(gridpane);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Puzzle Game");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

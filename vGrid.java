@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package puzzlegame;
+//package puzzlegame;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -23,7 +23,7 @@ public class vGrid {
                     for(int j=0;j<4;j++){
                         
                         Label d = new Label("Default");
-                        d.setMinSize(80, 40);
+                        d.setMinSize(60, 60);
                         seeGrid.add(d,i,j);
                     }
         }
@@ -39,7 +39,11 @@ public class vGrid {
                     for(int j=0;j<b;j++){
                         
                         Label d = new Label(c);
-                        d.setMinSize(b*40,a*40);
+                        if(a<b){
+                            d.setMinSize(b*30,a*60);
+                        }else{
+                            d.setMinSize(b*60,a*30);
+                        }
                         seeGrid.add(d,i,j);
                     }
         }
