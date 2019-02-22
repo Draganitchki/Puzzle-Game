@@ -90,7 +90,7 @@ public class Solutions {
         for(int b=0;b<3;b++){
             for(int i=0;i<4;i++){
                 for(int j=0;j<4;j++){
-                    if(solution.get(b)[i][j]==a.get(b)[i][j]){
+                    if(!(solution.get(b)[i][j]==a.get(b)[i][j])){
                         mistakes.get(b)[i][j]= true;
                     }else{
                         mistakes.get(b)[i][j]=false;

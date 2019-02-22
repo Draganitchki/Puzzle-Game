@@ -24,7 +24,8 @@ public class fourGrid {
     int count = 0;
     Button click ;
     Button [][] bG = new Button [4][4];
-    boolean[][] t = new boolean[4][4];
+    String[][] t = new String[4][4];
+    boolean[][] b = new boolean[4][4];
     public fourGrid(){
         functionGrid = new GridPane();
         functionGrid.setGridLinesVisible(true);
@@ -57,9 +58,11 @@ public class fourGrid {
                                                 y =j;
                                             }
                                             if(bG[i][j].getText().equals("O")){
-                                                t[i][j]= true;
+                                                t[i][j]= "O";
+                                            }else if(bG[i][j].getText().equals("X")){
+                                                t[i][j]= "X";
                                             }else{
-                                                t[i][j]= false;
+                                                t[i][j]=" ";
                                             }
                                         }
                                     }
@@ -106,17 +109,33 @@ public class fourGrid {
     public Button getButton(){
         return click;
     }
-    public boolean[][] getState(){
+    public String[][] getState(){
         for(int i =0;i<0;i++){
             for(int j=0;j<4;j++){
                 if(bG[i][j].getText().equals("O")){
-                    t[i][j]= true;
+                    t[i][j]= "O";
+                }else if(bG[i][j].getText().equals("X")){
+                    t[i][j] = "X";
                 }else{
-                    t[i][j] = false;
+                    t[i][j]= " ";
                 }
             }
         }
         return t;
+    }
+    public boolean[][] getStateBool(){
+        for(int i =0;i<0;i++){
+            for(int j=0;j<4;j++){
+                if(bG[i][j].getText().equals("O")){
+                    b[i][j]= true;
+                }else if(bG[i][j].getText().equals("X")){
+                    b[i][j] = false;
+                }else{
+                    b[i][j]= false;
+                }
+            }
+        }
+        return b;
     }
     public String[][] getStrings(){
         String[][] s = new String[4][4];
@@ -145,10 +164,10 @@ public class fourGrid {
     public int getCount(){
         return count;
     }
-    public void removeMistakes(boolean[][] b){
+    public void removeMistakes(boolean[][] a){
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
-                if((b[i][j]==t[i][j])){
+                if(a[i][j]== false){
                     if(bG[i][j].getText().equals("O")){
                         bG[i][j].setBackground(new Background(new BackgroundFill(
                 Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));

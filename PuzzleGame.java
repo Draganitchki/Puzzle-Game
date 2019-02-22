@@ -197,8 +197,8 @@ public class PuzzleGame extends Application {
                 @Override
                 public void handle(ActionEvent e){
                     ArrayList<boolean[][]> b = new ArrayList<boolean[][]>();
-                    for(fourGrid g : gamePanes){
-                        b.add(g.getState());
+                    for(int a=0;a<3;a++){
+                        b.add(gamePanes.get(a).getStateBool());
                     }
                     b= sl.findMistakes(b);
                     int j =0;
@@ -262,7 +262,7 @@ public class PuzzleGame extends Application {
                         ArrayList<boolean[][]> b = new ArrayList<boolean[][]>();
                         ArrayList<String[][]> c = new ArrayList<String[][]>();
                         for(fourGrid g : gamePanes){
-                            b.add(g.getState());
+                            b.add(g.getStateBool());
                             c.add(g.getStrings());
                         }
                         
