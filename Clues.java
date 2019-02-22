@@ -1,5 +1,5 @@
 
-package puzzlegame;
+package Assignment2Final;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 
 /**
  * @author Svetozar Draganitchki and Ben
- * The Clues class 
+ * The Clues class holds and displays clues
  */
 public class Clues {
     
@@ -78,7 +78,7 @@ public class Clues {
     
     //reads text file and stores them to a String array  to be used for other classes
     private void getClues(){
-        try{
+        try{ // try keeps program running even if file has errors
             BufferedReader br = new BufferedReader(new FileReader("Puzzle.txt"));
             for(int j=0;j<34;j++){
                 br.readLine();
@@ -89,7 +89,7 @@ public class Clues {
             br.close();
         }
         catch(FileNotFoundException e ){
-            System.out.println("fix me");//why does it printout these comments
+            System.out.println("fix me");
             
         }
         catch(IOException d){
@@ -98,7 +98,10 @@ public class Clues {
         
     }
     
-    // This method appears to not be used 
+    /**
+     * reads the labels from the file
+     * @return an array with all the labels
+     */
     public ArrayList<String> getLables(){
         ArrayList<String> s = new ArrayList<String>();
         try{
@@ -118,7 +121,11 @@ public class Clues {
         return s;
     }
     
-    //Not sure what to say here but it seem
+    
+    /**
+     *  adds a clue to the screen
+     * @return boolean weither or not there was another clue
+     */
       public boolean addClue(){
         boolean b = true;
         if(counter<5){
@@ -142,11 +149,21 @@ public class Clues {
         return b;
     }
       
+      /**
+       * String representation of the clues
+       * @return 
+       */
     @Override
       public String toString(){
           return "Title:" + title.getText() + " Counter:" + counter + " Errors:" + errors;
       }
       
+      
+      /**
+       * equals method
+       * @param o - object being compared
+       * @return boolean wiether or not they are equal
+       */
       @Override
     public boolean equals(Object o){
         if(o == null) return false;
