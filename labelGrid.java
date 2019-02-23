@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package puzzlegame;
-
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
 /**
- *
- * @author Svetozar Draganitchki 
+ *this creates the labels for the game
+ * @author Svetozar Draganitchki and ben
  */
 public class labelGrid {
     
@@ -34,11 +27,19 @@ public class labelGrid {
     }
     
     
-    //returns the label called grid to keep up with consistancy of rest of the code
+    /**returns the label called grid to keep up with consistancy of rest of the code
+     * 
+     * @return var -Label
+     */
     public Label getGrid(){
         return var;
     }
     
+    
+    /**
+     * String representaion of the labels
+     * @return 
+     */
     @Override
     public String toString(){
         return "Label:" + var;

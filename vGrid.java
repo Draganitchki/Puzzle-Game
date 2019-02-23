@@ -1,20 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package puzzlegame;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 /**
- *
+ *this creates the variables used to distinguish the catagories of the game
  * @author Svetozar and Ben
  * This class is the labels gui grid class
  */
@@ -22,6 +11,10 @@ public class vGrid {
     GridPane seeGrid;
     
     ArrayList<String> s = new ArrayList<String>();
+    
+    /**
+     * defalt constructor
+     */
     public vGrid(){
         seeGrid = new GridPane();
         seeGrid.setGridLinesVisible(true);
@@ -38,7 +31,12 @@ public class vGrid {
         
     }
     
-    
+    /**
+     * constructor that uses info provided
+     * @param s - ArrayList<String> thatcontains the text for labels
+     * @param a - int the h gap
+     * @param b - int the v gap
+     */
     public vGrid(ArrayList<String> s,int a, int b){
         seeGrid = new GridPane();
         seeGrid.setGridLinesVisible(true);

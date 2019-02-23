@@ -1,14 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package puzzlegame;
-
-
-import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Stack;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +9,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -33,18 +22,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 /**
- *
+ * main class that keeps the GUI running and keeps game playing
  * @author Svetozar and Ben
  */
 public class PuzzleGame extends Application {
     
     
-    //Used to display the first popup window
+    //Used to display the first popup window with game options
     @Override
     public void start(Stage primaryStage) {
         
@@ -84,20 +72,20 @@ public class PuzzleGame extends Application {
         );
         final ComboBox comboBox2 = new ComboBox(options2);
        
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        btn.setOnAction(new EventHandler<ActionEvent>() {  //picks which game to play
             
             @Override
             public void handle(ActionEvent event) {
                 long startTime = System.currentTimeMillis();
 
-            if (comboBox.getValue() == "3x4 Grid" && comboBox2.getValue() == "Easy"){
+            if (comboBox.getValue() == "3x4 Grid" && comboBox2.getValue() == "Easy"){  // runs the 3x4 grid
                 Pane secondaryLayout = new Pane();
                 
                 
-                GridPane gameGrid = new GridPane();
-                AboutMe aboutme  = new AboutMe();
+                GridPane gameGrid = new GridPane();  // buttons for the game
+                AboutMe aboutme  = new AboutMe();  // info and story for game
                 aboutme.setText();
-                Clues clues = new Clues();
+                Clues clues = new Clues();  // clues to solve game
                 clues.addClue();
                 
                 
@@ -106,7 +94,7 @@ public class PuzzleGame extends Application {
                 gameGrid.setVgap(2);
                 gameGrid.relocate(0,0);
                 
-                for (int i=0;i<3;i++){
+                for (int i=0;i<3;i++){  // sets 3 grids of buttons for each of the variables
                     fourGrid g = new fourGrid();
                     gamePanes.add(g);
                 }
@@ -125,7 +113,7 @@ public class PuzzleGame extends Application {
 
                 
                 
-                // I am not sure how to fixx all of these for loops but i do want to use only one for loop
+                //sets up see panes that have categories so player knows what to solve
                 for(int i=0;i<4;i++){
                     temp.add(s.get(count));
                     count++;
@@ -154,7 +142,7 @@ public class PuzzleGame extends Application {
                 
                
 
-                Scene secondScene = new Scene(secondaryLayout, 1300, 900);
+                Scene secondScene = new Scene(secondaryLayout, 1200, 700);
 
                 gameGrid.add(seePanes.get(0).getGrid(), 1, 2);
                 gameGrid.add(seePanes.get(1).getGrid(), 1, 3);
@@ -177,7 +165,7 @@ public class PuzzleGame extends Application {
                 
                 @Override
                 public void handle(ActionEvent e){
-                    if(!clues.addClue()){
+                    if(!clues.addClue()){  // warning if you are out of clues
                         Alert noHints = new Alert(AlertType.WARNING);
                         noHints.setHeaderText("Clues");
                         noHints.setContentText(" There are no more clues");
@@ -200,23 +188,31 @@ public class PuzzleGame extends Application {
                 public void handle(ActionEvent e){
                     ArrayList<boolean[][]> b = new ArrayList<boolean[][]>();
                     for(int a=0;a<3;a++){
-                        b.add(gamePanes.get(a).getStateBool());
+                        if(a==2){
+                            b.add(gamePanes.get(2).getStateBool());
+                        }else if(a==1){
+                            b.add(gamePanes.get(1).getStateBool());
+                        }else{
+                            b.add(gamePanes.get(0).getStateBool());
+                        }
                     }
-                    b= sl.findMistakes(b);
+                    b= sl.findMistakes(b); // returns an arraylist with all the mistakes on the board
                     int j =0;
-                    for(int i=0;i<3;i++){
+                    for(int i=0;i<3;i++){ 
                         gamePanes.get(i).removeMistakes(b.get(i));
                         j+= gamePanes.get(i).getCount();
                     }
-                    Alert mistakes = new Alert(AlertType.INFORMATION);
+                    Alert mistakes = new Alert(AlertType.INFORMATION);  // informs how many mistakes there have been this game and how much time added
                     mistakes.setHeaderText("Mistakes");
-                    mistakes.setContentText(" There are "+j+ " mistakes. "+(j*12)+" seconds added to time");
+                    mistakes.setContentText(" There are "+j+ " total mistakes. "+(j*12)+" seconds added to time");
                     mistakes.showAndWait();
                         
                     
                 }
 });
-                
+                /**
+                 *  undo's the last move made on the board
+                 */
                 Button undo = new Button("Undo");
                 undo.setMinSize(100,50);
                 
@@ -231,7 +227,7 @@ public class PuzzleGame extends Application {
                             gamePanes.get(i).setState(last.get(i));
                         }
                         
-                    }else{
+                    }else{ // displays warning if there are no saves
                         Alert noSaves = new Alert(AlertType.WARNING);
                         noSaves.setHeaderText("Undo");
                         noSaves.setContentText(" There is nothing to undo");
@@ -243,7 +239,7 @@ public class PuzzleGame extends Application {
                 HBox fourMainButtons = new HBox();
                 fourMainButtons.setSpacing(20);
                 fourMainButtons.getChildren().addAll(b,m,undo);
-                fourMainButtons.relocate(100,700);
+                fourMainButtons.relocate(450,600);
                 
                 
                 
@@ -255,28 +251,29 @@ public class PuzzleGame extends Application {
                 secondaryLayout.getChildren().addAll(gameGrid,aboutme.getVBox(),clues.getVBox(),fourMainButtons);
                 
                 
-                
+                /**
+                 * this makes it so whenever user moves the mouse the game checks for a mistake and updates its save information
+                 */
                 secondaryLayout.setOnMouseMoved(new EventHandler<MouseEvent>(){
                     
                     @Override
                     public void handle(MouseEvent e){
                         ArrayList<boolean[][]> b = new ArrayList<boolean[][]>();
                         ArrayList<String[][]> c = new ArrayList<String[][]>();
-                        for(fourGrid g : gamePanes){
-                            b.add(g.getStateBool());
-                            c.add(g.getStrings());
+                        for(int i =0;i<3;i++){
+                            b.add(gamePanes.get(i).getStateBool());
+                            c.add(gamePanes.get(i).getStrings());
                         }
                         
                         if(save.checkSaved(c)){
                             save.addSave(c);
-                            System.out.println("saved");
 }
                         
                         
                         if(sl.checkSolutions(b)){
                             int errors = 0;
                             for(int i=0;i<3;i++){
-                                errors += gamePanes.get(i).getCount();
+                                errors += gamePanes.get(i).getCount();  // adds time
                             }
                             errors += clues.getErrors();
                             long finalTime = System.currentTimeMillis()- startTime +(12000*errors);
@@ -285,7 +282,7 @@ public class PuzzleGame extends Application {
                             dialog.initModality(Modality.APPLICATION_MODAL);
                             dialog.initOwner(primaryStage);
                             VBox dialogVbox = new VBox(20);
-                            dialogVbox.getChildren().add(new Text("You Won!/n It Took you "+ finalTime + " seconds to complete /n "));
+                            dialogVbox.getChildren().add(new Text("You Won!           It Took you "+ finalTime + " seconds to complete  "));
                             Scene dialogScene = new Scene(dialogVbox, 300, 200);
                             dialog.setScene(dialogScene);
                             dialog.show();
@@ -304,7 +301,7 @@ public class PuzzleGame extends Application {
                 }
             else
             {
-                invalidSelection.showAndWait();
+                invalidSelection.showAndWait(); // if wrong selection is made 
             }
             }
         });
